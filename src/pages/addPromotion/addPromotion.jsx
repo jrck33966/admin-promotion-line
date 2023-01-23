@@ -71,7 +71,7 @@ function AddPormotion() {
             const content = await rawResponse.json();
             if (content.statusCode == '200') {
                 Swal.fire({
-                    position: 'top-end',
+                    position: 'center',
                     icon: 'success',
                     title: 'Your work has been saved',
                     showConfirmButton: false,
