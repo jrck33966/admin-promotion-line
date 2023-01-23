@@ -29,25 +29,34 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }));
+
 function AddPormotion() {
-    return <h2>Home</h2>;
-  }
-  
-function AddPormotion2() {
     const classes = useStyles();
     const [message, setMessage] = useState('');
     const [image, setImage] = useState('');
     const [url, setUrl] = useState('');
+    const [buttonSave, setButtonSave] = useState(true);
 
     const handleMessageChange = event => {
         setMessage(event.target.value);
+        chk();
     };
     const handleImageChange = event => {
         setImage(event.target.value);
+        chk();
     };
     const handleUrlChange = event => {
         setUrl(event.target.value);
+        chk();
     };
+
+    const chk = () => {
+        if (message && image && url) {
+            setButtonSave(false);
+        } else {
+            setButtonSave(true);
+        }
+    }
 
     const save = async () => {
         try {
@@ -142,6 +151,7 @@ function AddPormotion2() {
                         fontSize: "12px",
                         width: "100px"
                     }}
+                    disabled={buttonSave}
                     onClick={save}
                 >
                     Save
