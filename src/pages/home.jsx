@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Swal from 'sweetalert2'
-
+import { useCookies } from 'react-cookie';
 import { Popup } from "./popup/popup";
 import { margin } from '@mui/system';
 const columns = [
@@ -24,6 +24,8 @@ export default function StickyHeadTable() {
   const [open, setOpen] = React.useState(false);
   const [dataEdit, setDataEdit] = React.useState({});
   const [type, setType] = React.useState('');
+  const [cookies, removeCookie] = useCookies(['token']);
+
   useEffect(() => {
     callApi();
   }, []);
@@ -39,7 +41,6 @@ export default function StickyHeadTable() {
       });
       const content = await rawResponse.json();
       if (content.statusCode == '200') {
-        console.log(content)
         setRows(content.result)
       }
     } catch (e) {
@@ -47,15 +48,14 @@ export default function StickyHeadTable() {
     }
   }
 
-
-
   const callApiDelete = async (id) => {
     try {
       const rawResponse = await fetch(`http://localhost:3000/api/v1/promotion/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'authentication': `Bearer ${cookies.token}`
         }
       });
       const content = await rawResponse.json();
@@ -66,6 +66,14 @@ export default function StickyHeadTable() {
           'success'
         )
         callApi();
+      } else if (content.statusCode === '401') {
+        removeCookie('token')
+        Swal.fire({
+          title: 'Error!',
+          text: content.message,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
       } else {
         Swal.fire({
           title: 'Error!',
@@ -96,13 +104,13 @@ export default function StickyHeadTable() {
       >
         Add Promotion
       </Button>
-      <Paper sx={{height:'100%', width: '100%', overflow: 'hidden' }}>
+      <Paper sx={{ height: '100%', width: '100%', overflow: 'hidden' }}>
 
         {open ? <Popup type={type} data={dataEdit} closePopup={() => {
           setOpen(false)
           callApi();
         }} /> : null}
-        <TableContainer sx={{ }}>
+        <TableContainer sx={{}}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

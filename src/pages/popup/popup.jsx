@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { makeStyles } from "@material-ui/core/styles";
 import Swal from 'sweetalert2'
+import { useCookies } from 'react-cookie';
 
 const useStyles = makeStyles((theme) => ({
     input: {
@@ -36,10 +37,10 @@ export const Popup = ({ type, data, closePopup }) => {
     const [image, setImage] = useState('');
     const [url, setUrl] = useState('');
     const [title, setTitle] = useState('');
+    const [cookies, removeCookie] = useCookies(['token']);
 
     const handleMessageChange = event => {
         setMessage(event.target.value);
-
     };
     const handleImageChange = event => {
         setImage(event.target.value);
@@ -52,7 +53,7 @@ export const Popup = ({ type, data, closePopup }) => {
 
 
     useEffect(() => {
-        if (type == 'edit') {
+        if (type === 'edit') {
             setMessage(data.message)
             setImage(data.image)
             setUrl(data.url)
@@ -69,12 +70,13 @@ export const Popup = ({ type, data, closePopup }) => {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authentication': `Bearer ${cookies.token}`
                 },
                 body: JSON.stringify({ id: data.id, update: { message: message, image: image, url: url } })
             });
             const content = await rawResponse.json();
-            if (content.statusCode == '200') {
+            if (content.statusCode === '200') {
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -83,12 +85,21 @@ export const Popup = ({ type, data, closePopup }) => {
                     timer: 1500
                 })
                 closePopup();
-            } else {
+            } else if (content.statusCode === '401') {
+                removeCookie('token')
                 Swal.fire({
                     title: 'Error!',
                     text: content.message,
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'Ok'
+                })
+            } else {
+                removeCookie('token')
+                Swal.fire({
+                    title: 'Error!',
+                    text: content.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
                 })
             }
         } catch (e) {
@@ -108,12 +119,13 @@ export const Popup = ({ type, data, closePopup }) => {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authentication': `Bearer ${cookies.token}`
                 },
                 body: JSON.stringify({ image: image, message: message, url: url, active: true })
             });
             const content = await rawResponse.json();
-            if (content.statusCode == '200') {
+            if (content.statusCode === '200') {
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -122,7 +134,16 @@ export const Popup = ({ type, data, closePopup }) => {
                     timer: 1500
                 })
                 closePopup();
-            } else {
+            } else if (content.statusCode === '401') {
+                removeCookie('token')
+                Swal.fire({
+                    title: 'Error!',
+                    text: content.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
+            else {
                 Swal.fire({
                     title: 'Error!',
                     text: content.message,
@@ -197,7 +218,7 @@ export const Popup = ({ type, data, closePopup }) => {
                                     fontSize: "12px",
                                     width: "100px"
                                 }}
-                                onClick={type == 'add' ? save : edit}
+                                onClick={type === 'add' ? save : edit}
                             >
                                 Save
                             </Button>
