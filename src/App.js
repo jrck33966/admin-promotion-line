@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <div className='main'>
-        <BrowserRouter>
+        <BrowserRouter basename="/admin-promotion-line">
           <nav className='navbar'>
              {/* <NavLink end to="/" className={({ isActive }) => isActive ? activeClassName : ClassName} >Add Promotion</NavLink> */}
             {/* <NavLink to="/edit" className={({ isActive }) => isActive ? activeClassName : ClassName} >Edit Promotion</NavLink>     */}
