@@ -60,7 +60,7 @@ function AddPormotion() {
 
     const save = async () => {
         try {
-            const rawResponse = await fetch('http://localhost:3000/api/v1/promotion', {
+            const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/promotion', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

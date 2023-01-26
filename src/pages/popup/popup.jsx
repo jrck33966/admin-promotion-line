@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import "./popup.css";
+import Swal from 'sweetalert2'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import { makeStyles } from "@material-ui/core/styles";
-import Swal from 'sweetalert2'
 import { useCookies } from 'react-cookie';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +41,7 @@ export const Popup = ({ type, data, closePopup }) => {
     const [message, setMessage] = useState('');
     const [image, setImage] = useState('');
     const [url, setUrl] = useState('');
+    const [active, setActive] = useState('ture');
     const [title, setTitle] = useState('');
     const [cookies, removeCookie] = useCookies(['token']);
 
@@ -51,12 +57,17 @@ export const Popup = ({ type, data, closePopup }) => {
 
     };
 
+    const handleActiveChange = event => {
+        setActive(event.target.value);
+
+    };
 
     useEffect(() => {
         if (type === 'edit') {
             setMessage(data.message)
             setImage(data.image)
             setUrl(data.url)
+            setActive(data.active)
             setTitle('Edit Promotion')
         } else {
             setTitle('Add Promotion')
@@ -66,14 +77,22 @@ export const Popup = ({ type, data, closePopup }) => {
 
     const edit = async () => {
         try {
-            const rawResponse = await fetch('http://localhost:3000/api/v1/promotion', {
+            const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/promotion', {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'authentication': `Bearer ${cookies.token}`
                 },
-                body: JSON.stringify({ id: data.id, update: { message: message, image: image, url: url } })
+                body: JSON.stringify({
+                    id: data.id,
+                    update: {
+                        message: message,
+                        image: image,
+                        url: url,
+                        active: active
+                    }
+                })
             });
             const content = await rawResponse.json();
             if (content.statusCode === '200') {
@@ -115,7 +134,7 @@ export const Popup = ({ type, data, closePopup }) => {
 
     const save = async () => {
         try {
-            const rawResponse = await fetch('http://localhost:3000/api/v1/promotion', {
+            const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/promotion', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -210,6 +229,25 @@ export const Popup = ({ type, data, closePopup }) => {
                             value={url}
                             onChange={handleUrlChange}
                         />
+                        <FormControl>
+                            <FormLabel id="demo-row-radio-buttons-group-label">Active</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignContent: 'center'
+                                }}
+                                value={active}
+                                onChange={handleActiveChange}
+                            >
+                                <FormControlLabel value="true" control={<Radio />} label="true" />
+                                <FormControlLabel value="false" control={<Radio />} label="false" />
+
+                            </RadioGroup>
+                        </FormControl>
                         <div className='button'>
                             <Button
                                 variant="contained"
