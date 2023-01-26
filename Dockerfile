@@ -9,7 +9,7 @@ RUN npm install
  
 # add app
 COPY . /app
-EXPOSE 6000
+EXPOSE 3006
  
 # start app
 CMD ["npm", "start"]
