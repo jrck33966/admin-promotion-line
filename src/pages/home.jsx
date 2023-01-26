@@ -113,21 +113,40 @@ export default function StickyHeadTable() {
         <TableContainer sx={{}}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow>
-                <TableCell>
+              <TableRow
+                style={{
+                  backgroundColor: '#BB2649'
+                }}
+              >
+                <TableCell
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}
+                >
                 </TableCell>
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ width: '100%', textAlign: 'center' }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      backgroundColor: 'transparent',
+                      color: '#fff'
+                    }}
                   >
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell>
-                </TableCell>
-                <TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}>
+                </TableCell >
+                <TableCell
+                  style={{
+                    backgroundColor: 'transparent'
+                  }}>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -136,7 +155,15 @@ export default function StickyHeadTable() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.id}
+                      style={{
+                        backgroundColor: row['active'] ? 'fff' : 'rgb(162 156 155 / 50%)'
+                      }}
+                    >
                       <TableCell>
                         <img src={row['image']} alt="promotion image" style={{ width: '150px', height: '150px' }} />
                       </TableCell>
