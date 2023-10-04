@@ -32,7 +32,7 @@ export default function StickyHeadTable() {
 
   const callApi = async () => {
     try {
-      const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/promotion/all', {
+      const rawResponse = await fetch('https://api-line-promotion.onrender.com/api/v1/promotion/all', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -50,7 +50,7 @@ export default function StickyHeadTable() {
 
   const callApiDelete = async (id) => {
     try {
-      const rawResponse = await fetch(`https://api-promotion-line-production.up.railway.app/api/v1/promotion/${id}`, {
+      const rawResponse = await fetch(`https://api-line-promotion.onrender.com/api/v1/promotion/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',

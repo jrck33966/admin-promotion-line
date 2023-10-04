@@ -23,7 +23,7 @@ export default function SignIn(props) {
 
     const callApi = async (userName, password) => {
         try {
-            const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/auth/login', {
+            const rawResponse = await fetch('https://api-line-promotion.onrender.com/api/v1/auth/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

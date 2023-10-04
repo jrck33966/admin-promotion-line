@@ -77,7 +77,7 @@ export const Popup = ({ type, data, closePopup }) => {
 
     const edit = async () => {
         try {
-            const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/promotion', {
+            const rawResponse = await fetch('https://api-line-promotion.onrender.com/api/v1/promotion', {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -134,7 +134,7 @@ export const Popup = ({ type, data, closePopup }) => {
 
     const save = async () => {
         try {
-            const rawResponse = await fetch('https://api-promotion-line-production.up.railway.app/api/v1/promotion', {
+            const rawResponse = await fetch('https://api-line-promotion.onrender.com/api/v1/promotion', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
